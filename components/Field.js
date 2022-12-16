@@ -6,6 +6,7 @@ export default function Field(props) {
   return (
     <View>
       <TextInput
+
         {...props}
         style={{
           borderRadius: 100,

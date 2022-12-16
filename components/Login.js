@@ -48,15 +48,18 @@ export default function Login({ navigation }) {
             Login to your account
           </Text>
           <Field
+            
             placeholder="Email / Username"
             keyboardType="email-address"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.nativeEvent.text);
+            }}
             value={email}
           ></Field>
           <Field
             placeholder="Password"
             secureTextEntry={true}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.nativeEvent.text)}
             value={password}
           ></Field>
 
@@ -76,7 +79,9 @@ export default function Login({ navigation }) {
             textColor="white"
             bgColor={darkGreen}
             btnLabel="Login"
-            press={() => alert("Loged In")}
+            press={
+              () => alert( email+"\n "+ password )
+            }
           />
 
           <View
@@ -90,7 +95,10 @@ export default function Login({ navigation }) {
               Don't have an account ?{" "}
             </Text>
             <TouchableOpacity
-              // onPress={navigation.navigate("Signup")}
+              // onPress = { navigation.navigate("Signup") }
+              onPress = { ()=> {
+                navigation.navigate("Signup") 
+              }}
             >
               <Text
                 style={{ color: darkGreen, fontWeight: "bold", fontSize: 16 }}

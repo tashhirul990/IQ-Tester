@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Background from "./Background";
 import Field from "./Field";
 import { darkGreen } from "./Constants";
@@ -8,6 +8,17 @@ import { TouchableOpacity } from "react-native";
 
 
 export default function Signup({ navigation }) {
+  const [firstName , setFirstName] = useState("");
+  const [lastName , setLastName] = useState("");
+  const [contactNumber , setContactNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  function printData(){
+    alert( firstName+" "+lastName+"\n"+contactNumber+"\n"+email+"\n"+password+"\n"+confirmPassword );
+  }
+
   return (
     <Background>
       <View style={{ alignItems: "center", width: 400 }}>
@@ -41,16 +52,27 @@ export default function Signup({ navigation }) {
             alignItems: "center",
           }}
         >
-          <Field placeholder="First Name"></Field>
-          <Field placeholder="Last Name"></Field>
+          <Field placeholder="First Name"
+            onChange={(e) => setFirstName(e.nativeEvent.text)}
+          ></Field>
+          <Field placeholder="Last Name"
+            onChange={(e) => setLastName(e.nativeEvent.text)}
+          ></Field>
           <Field
             placeholder="Contact Number"
             keyboardType={"phone-pad"}
+            onChange={(e) => setContactNumber(e.nativeEvent.text)}
           ></Field>
-          <Field placeholder="Email ID" keyboardType="email-address"></Field>
+          <Field placeholder="Email ID" keyboardType="email-address"
+            onChange={(e) => setEmail(e.nativeEvent.text)}
+          ></Field>
 
-          <Field placeholder="Password" secureTextEntry={true}></Field>
-          <Field placeholder="Confirm Password" secureTextEntry={true}></Field>
+          <Field placeholder="Password" secureTextEntry={true}
+            onChange={(e) => setPassword(e.nativeEvent.text)}
+          ></Field>
+          <Field placeholder="Confirm Password" secureTextEntry={true}
+            onChange={(e) => setConfirmPassword(e.nativeEvent.text)}
+          ></Field>
 
           <View style={{ marginTop: 30 }}></View>
 
@@ -59,8 +81,8 @@ export default function Signup({ navigation }) {
             bgColor={darkGreen}
             btnLabel="Signup"
             press={() => {
-              alert("Account cearted");
-              props.navigation.navigate("Login");
+              printData();
+              navigation.navigate("Login");
             }}
           />
 
@@ -78,11 +100,7 @@ export default function Signup({ navigation }) {
             <TouchableOpacity>
               <Text
                 style={{ color: darkGreen, fontWeight: "bold", fontSize: 16 }}
-                // onPress={ ()=>{
-                //   //console.log( props.navigation );
-                //    navigation.navigate("Login", {}) 
-                // }
-                //}  
+                onPress = { ()=>  navigation.navigate("Login") }
               >
                 {" "}
                 Login{" "}
