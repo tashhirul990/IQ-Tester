@@ -5,11 +5,58 @@ import Field from "./Field";
 import { darkGreen } from "./Constants";
 import Btn from "./Btn";
 import { TouchableOpacity } from "react-native";
-
+import { AsyncStorage } from "react-native";
+import flush from "./Flush";
+import { IP } from "./Constants";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // function validateEmail() {
+  //   var validRegex =
+  //     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+  //   if (!email.match(validRegex)) {
+  //     alert("Valid email address!");
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
+  const storeData = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+      console.log("Data stored in local storage");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    console.log("API hit");
+    const URL = "http://"+IP+":8000/get_token/";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+      }),
+    });
+    console.log("API Done");
+    const res = await response.json();
+    if (res.token != undefined) {
+      flush("Login successfully", "success");
+      navigation.navigate("LandingPage");
+      storeData("token", res.token);
+    } else {
+      flush("Invalid username or password", "warning");
+    }
+    // console.log(JSON.parse(res));
+  };
 
   return (
     <Background>
@@ -48,7 +95,6 @@ export default function Login({ navigation }) {
             Login to your account
           </Text>
           <Field
-            
             placeholder="Email / Username"
             keyboardType="email-address"
             onChange={(e) => {
@@ -67,7 +113,9 @@ export default function Login({ navigation }) {
             style={{ alignItems: "flex-end", width: "75%", marginBottom: 100 }}
           >
             <TouchableOpacity
-              onPress={() => alert(" We are working it, will coming soon.. ")}
+              onPress={() =>
+                alert(" We are working for it, will coming soon.. ")
+              }
             >
               <Text style={{ color: darkGreen, fontWeight: "bold" }}>
                 Forgot Password ?
@@ -79,9 +127,7 @@ export default function Login({ navigation }) {
             textColor="white"
             bgColor={darkGreen}
             btnLabel="Login"
-            press={
-              () => alert( email+"\n "+ password )
-            }
+            press={handleSubmit}
           />
 
           <View
@@ -96,8 +142,8 @@ export default function Login({ navigation }) {
             </Text>
             <TouchableOpacity
               // onPress = { navigation.navigate("Signup") }
-              onPress = { ()=> {
-                navigation.navigate("Signup") 
+              onPress={() => {
+                navigation.navigate("Signup");
               }}
             >
               <Text

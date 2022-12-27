@@ -1,4 +1,4 @@
-import { View, Text , TextInput } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import React from "react";
 import { darkGreen } from "./Constants";
 
@@ -6,7 +6,6 @@ export default function Field(props) {
   return (
     <View>
       <TextInput
-
         {...props}
         style={{
           borderRadius: 100,

@@ -3,9 +3,22 @@ import { View, StyleSheet, Text } from "react-native";
 import Background from "./Background";
 import Btn from "./Btn";
 import { darkGreen } from "./Constants";
-
+import { AsyncStorage } from "react-native";
 
 const Home = (props) => {
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("token");
+      if (value !== null) {
+        props.navigation.navigate("LandingPage");
+        console.log(value);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+   retrieveData();
   return (
     <Background>
       <View style={{ marginHorizontal: 40, marginVertical: 100 }}>
