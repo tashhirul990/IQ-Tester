@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity  } from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import Btn from "./Btn";
 import { darkGreen, IP } from "./Constants";
@@ -13,10 +13,10 @@ import { AsyncStorage } from "react-native";
 export default function LandingPage({ navigation }) {
   const [roomID, setRoomID] = useState("");
   const [value, setValue] = useState(null);
-  const URL = "ws://"+IP+":8000/ws/awsc/room/";
+  const URL = "ws://" + IP + ":8000/ws/awsc/room/";
   const data = [
-    { label: "Automated Test", value: "1" },
-    { label: "Custom Test ", value: "2" },
+    { label: "Automatic Quiz", value: "1" },
+    { label: "Custom Quiz", value: "2" },
   ];
 
   const validateData = () => {
@@ -27,49 +27,50 @@ export default function LandingPage({ navigation }) {
     return true;
   };
 
-  const ws=useRef({});
+  const ws = useRef({});
 
-  const socketEvents= ()=>{
+  const socketEvents = () => {
     console.log("Use effect run");
     ws.current.onopen = () => {
-      // connection opened
       console.log("Connection built");
-      navigation.navigate("TestPage");
-      ws.current.send('something'); // send a message
+      navigation.navigate("TestPage", {ws: ws, roomID : roomID});
     };
 
-    ws.current.onmessage = e => {
-      // a message was received
-      console.log(e.data);
+    ws.current.onmessage = (e) => {
+      console.log("\nLanding Page OnMassege \n"+e.data);
     };
 
-    ws.current.onerror = e => {
+    ws.current.onerror = (e) => {
       // an error occurred
-      console.log(e.message);
+      flush("Invalid Room ID", "warning");
+      console.log("onError Landing Page :"+e.message);
     };
 
-    ws.current.onclose = e => {
+    ws.current.onclose = (e) => {
       // connection closed
-      console.log(e.code, e.reason);
+      console.log("onClose Landing Page :",e.code, e.reason);
     };
-  }
+  };
 
-  useEffect( socketEvents , [] );
+  useEffect(socketEvents, []);
 
   const handleSocket = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const fullURL=URL + roomID + "/?token=" + token;
-      console.log(fullURL)
-
+      
+      //ToDO
+      //"ws://127.0.0.1:8000/ws/awsc/room/roomID/token=token";
+      const customURL = URL + roomID + "/?token=" + token;
+      const autoURL= URL+"autoquiz/"+roomID+"/?token=" + token;
+      
+      const fullURL= value==1 ? autoURL : customURL;
+      console.log(fullURL);
       ws.current = new WebSocket(fullURL);
       socketEvents();
-      
-    } catch (error) {
-      console.log("WebError : "+error);
-    }
 
-    
+    } catch (error) {
+      console.log("WebError : " + error);
+    }
   };
 
   return (
@@ -78,7 +79,7 @@ export default function LandingPage({ navigation }) {
         <DropdownComponent data={data} setValue={setValue} value={value} />
         <Field
           placeholder="Enter Room ID"
-          keyboardType= "default"
+          keyboardType="default"
           onChange={(e) => setRoomID(e.nativeEvent.text)}
         />
         <Btn

@@ -8,6 +8,7 @@ import LandingPage from "./components/LandingPage";
 import TestPage from "./components/TestPage";
 import { View } from "react-native";
 import FlashMessage from "react-native-flash-message";
+import QuestionPage from "./components/QuestionPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ function App() {
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="LandingPage" component={LandingPage} />
           <Stack.Screen name="TestPage" component={TestPage} />
+          <Stack.Screen name="QuestionPage" component={QuestionPage} />
         </Stack.Navigator>
       </NavigationContainer>
 

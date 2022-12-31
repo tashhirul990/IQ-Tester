@@ -57,6 +57,34 @@ export default function Login({ navigation }) {
     }
     // console.log(JSON.parse(res));
   };
+/*
+  const handleSubmit = async () => {
+    console.log("API hit");
+    const URL = "http://"+IP+":8000/room/submit_quiz/";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "token " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+      }),
+    });
+    console.log("API Done");
+    const res = await response.json();
+    if (res.token != undefined) {
+      flush("Login successfully", "success");
+      navigation.navigate("LandingPage");
+      storeData("token", res.token);
+    } else {
+      flush("Invalid username or password", "warning");
+    }
+    // console.log(JSON.parse(res));
+  };
+
+*/
 
   return (
     <Background>
